@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file, redirect
 from scrapper import search_incruit, search_saramin
+from file import save_to_csv
 
 
 app = Flask(__name__)
@@ -8,13 +9,23 @@ app = Flask(__name__)
 def hello_world():
     return render_template("index.html")
 
-
+db={}
+page=5
 
 @app.route('/search')
 def search():
     keyword = request.args.get("keyword")
+
+    if keyword == "":
+        return redirect("/")
+
     print(keyword)
-    jobs = search_incruit(keyword)
+    
+    if keyword in db:
+        jobs = db[keyword]
+    else:
+        jobs = search_incruit(keyword,page)
+        db[keyword] =  jobs
     # jobs2 = search_saramin(keyword)
     # job_list = jobs+jobs2
     job_list = jobs
@@ -22,7 +33,10 @@ def search():
 
 @app.route('/file')
 def file():
-    return "file"
+    keyword = request.args.get("keyword")
+    jobs = search_incruit(keyword, page)
+    save_to_csv(jobs)
+    return send_file("./downloads.csv", as_attachment=True) 
 
 if __name__ == '__main__':
     app.run(debug=True)
