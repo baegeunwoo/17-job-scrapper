@@ -23,7 +23,7 @@ def search_saramin(keyword, page=1):
             
             job_data = {
                 "company": company,
-                "title": title,
+                "title": "사람인 공고제목:"+title,
                 "location" : location,
                 "link": link2
             }
@@ -34,7 +34,7 @@ def search_saramin(keyword, page=1):
 
 def search_incruit(keyword, page=1):
 
-    
+    jobs = []
 
     for i in range(page):
         page = 30 * i 
@@ -52,7 +52,7 @@ def search_incruit(keyword, page=1):
 
             job_data = {
                 "company": company,
-                "title": title,
+                "title": "인크루트 공고제목:"+title,
                 "location" : location,
                 "link": link
             }
