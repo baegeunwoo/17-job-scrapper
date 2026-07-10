@@ -28,7 +28,7 @@ def search():
         jobs2 = search_saramin(keyword,page)
         job_list = jobs+jobs2
         db[keyword] = job_list
-        
+
     return render_template("search.html", jobs=enumerate(job_list),keyword=keyword,count=len(job_list))
 
 @app.route('/file')
@@ -38,7 +38,7 @@ def file():
         return redirect("/")
 
     if keyword in db:
-        jobs = db[keyword]
+        job_list = db[keyword]
     else:
         jobs = search_incruit(keyword, page)
         jobs2 = search_saramin(keyword,page)
