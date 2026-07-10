@@ -34,7 +34,13 @@ def search():
 @app.route('/file')
 def file():
     keyword = request.args.get("keyword")
-    jobs = search_incruit(keyword, page)
+    if keyword == "":
+        return redirect("/")
+
+    if keyword in db:
+        jobs = db[keyword]
+    else:
+        jobs = search_incruit(keyword, page)
     save_to_csv(jobs)
     return send_file("./downloads.csv", as_attachment=True) 
 
