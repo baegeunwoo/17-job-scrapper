@@ -10,7 +10,7 @@ def hello_world():
     return render_template("index.html")
 
 db={}
-page=5
+page=2
 
 @app.route('/search')
 def search():
@@ -22,14 +22,14 @@ def search():
     print(keyword)
     
     if keyword in db:
-        jobs = db[keyword]
+        job_list = db[keyword]
     else:
         jobs = search_incruit(keyword,page)
-        db[keyword] =  jobs
-    # jobs2 = search_saramin(keyword)
-    # job_list = jobs+jobs2
-    job_list = jobs
-    return render_template("search.html", jobs=enumerate(job_list),keyword=keyword,count=len(jobs))
+        jobs2 = search_saramin(keyword,page)
+        job_list = jobs+jobs2
+        db[keyword] = job_list
+        
+    return render_template("search.html", jobs=enumerate(job_list),keyword=keyword,count=len(job_list))
 
 @app.route('/file')
 def file():
@@ -41,7 +41,9 @@ def file():
         jobs = db[keyword]
     else:
         jobs = search_incruit(keyword, page)
-    save_to_csv(jobs)
+        jobs2 = search_saramin(keyword,page)
+        job_list = jobs+jobs2
+    save_to_csv(job_list)
     return send_file("./downloads.csv", as_attachment=True) 
 
 if __name__ == '__main__':
